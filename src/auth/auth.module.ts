@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { RolesGuard } from './roles.gaurd';
+import { RolesGuard } from './roles.guard';
 
 @Module({
     imports: [
