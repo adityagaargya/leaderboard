@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { ContestsModule } from './contests/contests.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ParticipationsModule } from './participations/participations.module';
 import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
@@ -19,7 +20,7 @@ import * as redisStore from 'cache-manager-ioredis';
       }),
       isGlobal: true,
     }),
-    AuthModule, UsersModule, DatabaseModule, ContestsModule],
+    AuthModule, UsersModule, DatabaseModule, ContestsModule, ParticipationsModule],
   controllers: [AppController],
   providers: [AppService],
 })
