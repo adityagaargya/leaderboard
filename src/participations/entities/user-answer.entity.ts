@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { UserContest } from './user-contest.entity';
 import { Question } from '../../contests/entities/question.entity';
 
@@ -8,9 +8,11 @@ export class UserAnswer {
   id: string;
 
   @ManyToOne(() => UserContest, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_contest_id' })
   user_contest: UserContest;
 
   @ManyToOne(() => Question, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'question_id' }) 
   question: Question;
 
   @Column('uuid', { array: true })

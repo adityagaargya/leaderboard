@@ -6,9 +6,10 @@ import { UserContest } from './entities/user-contest.entity';
 import { UserAnswer } from './entities/user-answer.entity';
 import { Contest } from '../contests/entities/contest.entity';
 import { Option } from '../contests/entities/option.entity';
+import { User } from 'src/users/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserContest, UserAnswer, Contest, Option])],
+  imports: [TypeOrmModule.forFeature([UserContest, UserAnswer, Contest, Option, User])],
   providers: [ParticipationsService],
   controllers: [ParticipationsController],
   exports: [ParticipationsService],

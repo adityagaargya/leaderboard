@@ -1,9 +1,11 @@
-import { IsString, IsEnum, IsArray, ValidateNested } from 'class-validator';
+import { IsString, IsEnum, IsArray, ValidateNested, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 import { QuestionType } from '../entities/question.entity';
 
 class OptionDto {
   @IsString() option_text: string;
+  @IsBoolean()
+  @Type(() => Boolean)
   is_correct: boolean;
 }
 

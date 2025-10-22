@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, JoinColumn } from 'typeorm';
 
 import { Contest } from '../../contests/entities/contest.entity';
 import { User } from 'src/users/user.entity';
@@ -14,9 +14,11 @@ export class UserContest {
   id: string;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @ManyToOne(() => Contest, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'contest_id' }) 
   contest: Contest;
 
   @Column({ type: 'enum', enum: ParticipationStatus, default: ParticipationStatus.IN_PROGRESS })
