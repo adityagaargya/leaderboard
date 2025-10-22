@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_USER: tentwenty
+      POSTGRES_PASSWORD: tentwenty
+      POSTGRES_DB: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  nestjs:
+    build: .
+    container_name: nestjs
+    env_file: .env
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3000:3000"
+    restart: always
+    command: npm run start:dev
+
+volumes:
+  pgdata:
