@@ -8,20 +8,36 @@ import { ContestsModule } from './contests/contests.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ParticipationsModule } from './participations/participations.module';
 import * as redisStore from 'cache-manager-ioredis';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
-        CacheModule.registerAsync({
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 10,
+        },
+      ],
+    }),
+
+
+    CacheModule.registerAsync({
       useFactory: async () => ({
         store: redisStore,
         host: 'localhost',
         port: 6379,
-        ttl: 60, // default TTL in seconds
+        ttl: 60,
       }),
       isGlobal: true,
     }),
     AuthModule, UsersModule, DatabaseModule, ContestsModule, ParticipationsModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: APP_GUARD,
+    useClass: ThrottlerGuard,
+  },],
 })
-export class AppModule {}
+export class AppModule { }

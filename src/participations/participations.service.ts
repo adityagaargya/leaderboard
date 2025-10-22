@@ -6,8 +6,6 @@ import { UserAnswer } from './entities/user-answer.entity';
 import { Contest } from '../contests/entities/contest.entity';
 import { Option } from '../contests/entities/option.entity';
 import { SubmitAnswersDto } from './dto/submit-answers.dto';
-import { Redis } from 'ioredis';
-import { Inject } from '@nestjs/common';
 import { User } from 'src/users/user.entity';
 
 
@@ -26,9 +24,9 @@ export class ParticipationsService {
         const contest = await this.contestRepo.findOne({ where: { id: contest_id } });
         if (!contest) throw new NotFoundException('Contest not found');
 
-        const user : any= await this.userRepo.findOne({ where: { id: user_id } });                      
-        if (contest.access_level === 'VIP' && user.role === 'NORMAL')                           
-            throw new ForbiddenException('Only VIP users can join this contest');                     
+        const user: any = await this.userRepo.findOne({ where: { id: user_id } });
+        if (contest.access_level === 'VIP' && user.role === 'NORMAL')
+            throw new ForbiddenException('Only VIP users can join this contest');
 
         const existing = await this.userContestRepo.findOne({
             where: { user: { id: user_id }, contest: { id: contest_id } },
@@ -96,5 +94,25 @@ export class ParticipationsService {
             relations: ['user'],
             take: 10,
         });
+    }
+
+
+    async getUserContests(user_id: string) {
+        const participations = await this.userContestRepo.find({
+            where: { user: { id: user_id } },
+            relations: ['contest'], // load contest details
+            order: { created_at: 'DESC' },
+        });
+
+        return participations.map((p) => ({
+            contest_id: p.contest.id,
+            contest_name: p.contest.name,
+            access_level: p.contest.access_level,
+            start_time: p.contest.start_time,
+            end_time: p.contest.end_time,
+            prize_info: p.contest.prize_info,
+            score: p.score,
+            status: p.status,
+        }));
     }
 }
